@@ -1,0 +1,44 @@
+#include <opencv2/opencv.hpp>
+#include <string>
+
+int main()
+{
+    // Create a video writer object
+    cv::VideoWriter video("output_video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 10, cv::Size(640, 480));
+
+    // Check if the video writer is initialized successfully
+    if (!video.isOpened())
+    {
+        std::cout << "Failed to create video file" << std::endl;
+        return -1;
+    }
+
+    // Process a sequence of images
+    for (int i = 1; i <= 100; ++i)
+    {
+        // Generate the filename for each image
+        std::string filename = "image_" + std::to_string(i) + ".jpg";
+
+        // Read the image file
+        cv::Mat image = cv::imread(filename);
+
+        // Check if the image file is loaded successfully
+        if (image.empty())
+        {
+            std::cout << "Failed to load image: " << filename << std::endl;
+            break;
+        }
+
+        // Write the image to the video file
+        video.write(image);
+
+        // Display the current image
+        cv::imshow("Video", image);
+        cv::waitKey(10);  // Adjust the delay between frames (in milliseconds)
+    }
+
+    // Release the video writer and close the video file
+    video.release();
+
+    return 0;
+}
